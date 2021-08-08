@@ -5,6 +5,13 @@ const fs = require("fs");
 const path = require("path");
 const { animals } = require("./data/animals.json");
 
+//middleware that instructs the server to make certain files
+//readily available and to not gate it behind a server endpoint
+//provided a file path to a location in the application 'zookeepr-public'
+//and instructed the server to make these files static resources
+//all our front-end code can be accessed without having a specific server endpoint
+app.use(express.static("zookeepr-public"))
+
 //app.use() is a method executed by our express.js server
 //that mounts a function to the server that our requests
 //will pass htrough before getting to the intended endpoint
@@ -177,6 +184,13 @@ app.post("/api/animals", (req, res) => {
     //using res.json() to send the data back to the client
     res.json(animal);
   }
+});
+
+//route for index.html file
+app.get("/", (req, res) => {
+  //this GET route responds with an html page to display in the browser
+  //tell where to find the file we want our server to read and send it back to the client
+  res.sendFile(path.join(__dirname, "./zookeepr-public/index.html"));
 });
 
 app.listen(PORT, () => {
