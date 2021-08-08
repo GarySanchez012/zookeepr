@@ -9,7 +9,7 @@ const { animals } = require("./data/animals.json");
 //readily available and to not gate it behind a server endpoint
 //provided a file path to a location in the application 'zookeepr-public'
 //and instructed the server to make these files static resources
-//all our front-end code can be accessed without having a specific server endpoint
+//all our front-end code can be accessed without having a specific server endpoint!
 app.use(express.static("zookeepr-public"))
 
 //app.use() is a method executed by our express.js server
