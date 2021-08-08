@@ -10,7 +10,7 @@ const { animals } = require("./data/animals.json");
 //provided a file path to a location in the application 'zookeepr-public'
 //and instructed the server to make these files static resources
 //all our front-end code can be accessed without having a specific server endpoint!
-app.use(express.static("zookeepr-public"))
+app.use(express.static("zookeepr-public"));
 
 //app.use() is a method executed by our express.js server
 //that mounts a function to the server that our requests
@@ -121,10 +121,7 @@ function validateAnimal(animal) {
   if (!animal.diet || typeof animal.diet !== "string") {
     return false;
   }
-  if (
-    !animal.personalityTraits ||
-    typeof animal.personalityTraits !== "string"
-  ) {
+  if (!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
     return false;
   }
   return true;
@@ -173,6 +170,7 @@ app.post("/api/animals", (req, res) => {
 
   //set id on what the next index of the array will be
   req.body.id = animals.length.toString();
+  // console.log(req.body)
 
   //if any data in req.body is incorrect, send 404 error back
   if (!validateAnimal(req.body)) {
@@ -191,6 +189,23 @@ app.get("/", (req, res) => {
   //this GET route responds with an html page to display in the browser
   //tell where to find the file we want our server to read and send it back to the client
   res.sendFile(path.join(__dirname, "./zookeepr-public/index.html"));
+});
+
+//route for animals.html file
+app.get("/animals", (req, res) => {
+  res.sendFile(path.join(__dirname, "./zookeepr-public/animals.html"));
+});
+
+//route for zookeepers.html file
+app.get("/zookeepers", (req, res) => {
+  res.sendFile(path.join(__dirname, "./zookeepr-public/zookeepers.html"));
+});
+
+//"wildcard" route
+//* route should always come last otherwise it will take precedence
+//over named route and won't see what i expect on routes like /zookeeper
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './zookeepr-public/index.html'));
 });
 
 app.listen(PORT, () => {
